@@ -1,7 +1,7 @@
 #Relatório de Margem por Região e Segmento
 
-Objetivo: identificar quais regiões e segmentos apresentam menor margem de lucro.
-Destinatário: Diretoria Comercial.
+#Objetivo: identificar quais regiões e segmentos apresentam menor margem de lucro.
+#Destinatário: Diretoria Comercial.
 
 SELECT 
        Regiao AS Região,
@@ -14,10 +14,15 @@ WHERE TB_DSA_VENDAS.Cliente = TB_DSA_CLIENTES.ID_Cliente
 GROUP BY Regiao
 ORDER BY Margem_Lucro
 
+#A lógica utilizada consiste em juntar as tabelas de vendas e clientes para calcular a soma da receita () e dos custos de envio () por região, 
+além de derivar a margem de lucro como diferença entre receita e custos. O agrupamento é feito por região e os resultados são ordenados pela margem de lucro. 
+O resultado esperado é uma visão clara de quais regiões e segmentos apresentam maior ou menor margem, permitindo à diretoria comercial identificar áreas problemáticas 
+e potenciais oportunidades de melhoria.
+
 #Relatório de Rentabilidade por Categoria/Subcategoria de Produto
 
-Objetivo: descobrir quais categorias de produtos têm maior ou menor rentabilidade.
-Destinatário: Gerente de Produtos.
+#Objetivo: descobrir quais categorias de produtos têm maior ou menor rentabilidade.
+#Destinatário: Gerente de Produtos.
 
 SELECT 
     Categoria,
@@ -31,11 +36,15 @@ WHERE TB_DSA_PRODUTOS.ID_Produto = TB_DSA_VENDAS.Produto
 GROUP BY Categoria
 ORDER BY Margem_Lucro
 
+#A lógica utilizada cruza as tabelas de produtos e vendas, agrupando os dados por categoria e subcategoria. 
+São calculados indicadores como quantidade vendida, receita total, custos totais e margem de lucro. 
+O agrupamento por categoria permite comparar diferentes linhas de produtos, enquanto o ordenamento pela margem destaca quais categorias são mais ou menos rentáveis. 
+O resultado esperado é um relatório que mostra ao gerente de produtos quais categorias e subcategorias sustentam a rentabilidade da empresa e quais precisam de revisão estratégica.
 
 #Relatório de Impacto do Modo de Envio
 
-Objetivo: avaliar se o modo de envio está aumentando custos sem gerar aumento proporcional de receita.
-Destinatário: Gerente de Logística
+#Objetivo: avaliar se o modo de envio está aumentando custos sem gerar aumento proporcional de receita.
+#Destinatário: Gerente de Logística
 
 SELECT 
     p.Modo_Envio,
@@ -54,11 +63,16 @@ FROM (
 JOIN TB_DSA_PEDIDOS p ON sub.Pedido = p.ID_Pedido
 GROUP BY p.Modo_Envio;
 
+#A lógica utilizada cria uma subquery que calcula receita, custos e margem de lucro por pedido, 
+e depois relaciona esses dados com a tabela de pedidos para identificar o modo de envio utilizado. 
+Em seguida, são calculadas médias de receita, custos e margem por modo de envio. 
+O resultado esperado é um relatório que mostra ao gerente de logística se determinados modos de envio 
+estão elevando os custos sem gerar aumento proporcional de receita, apoiando decisões sobre renegociação de contratos ou ajustes na política de frete.
 
 #Relatório de Clientes com Maior e Menor Rentabilidade
 
-Objetivo: identificar clientes estratégicos (maior margem) e clientes problemáticos (baixo lucro ou prejuízo).
-Destinatário: Equipe de Relacionamento com Clientes (CRM)
+#Objetivo: identificar clientes estratégicos (maior margem) e clientes problemáticos (baixo lucro ou prejuízo).
+#Destinatário: Equipe de Relacionamento com Clientes (CRM)
 
 - Maior Rentabilidade
 
@@ -103,3 +117,9 @@ JOIN TB_DSA_CLIENTES p ON sub.Cliente = p.ID_Cliente
 GROUP BY ID_Cliente
 ORDER BY Margem_Media_Por_Cliente
 LIMIT 10
+
+#A lógica utilizada começa com uma subquery que calcula receita, custos e margem de lucro por cliente, agrupando todas as vendas relacionadas. 
+Em seguida, os dados são associados à tabela de clientes para trazer nome e identificação. O relatório de maior rentabilidade ordena os clientes 
+pela margem média em ordem decrescente e limita aos 10 primeiros, destacando os clientes mais estratégicos. Já o relatório de menor rentabilidade 
+faz o mesmo processo, mas ordena em ordem crescente, listando os 10 clientes menos lucrativos. O resultado esperado é fornecer à equipe de relacionamento 
+uma lista clara dos clientes que devem ser priorizados e daqueles que exigem atenção especial para renegociação ou revisão de estratégia.
