@@ -1,4 +1,4 @@
-*Relatório de Margem por Região e Segmento*
+#Relatório de Margem por Região e Segmento
 
 Objetivo: identificar quais regiões e segmentos apresentam menor margem de lucro.
 Destinatário: Diretoria Comercial.
@@ -14,7 +14,7 @@ WHERE TB_DSA_VENDAS.Cliente = TB_DSA_CLIENTES.ID_Cliente
 GROUP BY Regiao
 ORDER BY Margem_Lucro
 
-*Relatório de Rentabilidade por Categoria/Subcategoria de Produto*
+#Relatório de Rentabilidade por Categoria/Subcategoria de Produto
 
 Objetivo: descobrir quais categorias de produtos têm maior ou menor rentabilidade.
 Destinatário: Gerente de Produtos.
@@ -32,7 +32,7 @@ GROUP BY Categoria
 ORDER BY Margem_Lucro
 
 
-*Relatório de Impacto do Modo de Envio*
+#Relatório de Impacto do Modo de Envio
 
 Objetivo: avaliar se o modo de envio está aumentando custos sem gerar aumento proporcional de receita.
 Destinatário: Gerente de Logística
@@ -55,7 +55,7 @@ JOIN TB_DSA_PEDIDOS p ON sub.Pedido = p.ID_Pedido
 GROUP BY p.Modo_Envio;
 
 
-*Relatório de Clientes com Maior e Menor Rentabilidade*
+#Relatório de Clientes com Maior e Menor Rentabilidade
 
 Objetivo: identificar clientes estratégicos (maior margem) e clientes problemáticos (baixo lucro ou prejuízo).
 Destinatário: Equipe de Relacionamento com Clientes (CRM)
