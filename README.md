@@ -39,11 +39,6 @@ As queries foram organizadas em /queries e cada uma contém comentários explica
 # Relatórios
 Na pasta /reports estão os documentos dos relatórios gerados, organizados por área responsável.
 
-# Como Reproduzir
-- Importar as tabelas no SQLite;
-- Executar os scripts da pasta /queries;
-- Conferir os relatórios na pasta /reports.
-
 # Conclusão
 Este projeto mostra como SQL pode ser aplicado para resolver problemas reais de negócios, transformando dados brutos em insights estratégicos.
 Ele também serve como material de estudo para quem deseja praticar consultas SQL em cenários empresariais.
