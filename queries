@@ -1,0 +1,105 @@
+*Relatório de Margem por Região e Segmento*
+
+Objetivo: identificar quais regiões e segmentos apresentam menor margem de lucro.
+Destinatário: Diretoria Comercial.
+
+SELECT 
+       Regiao AS Região,
+       Segmento,
+       ROUND (SUM (Valor_Venda), 2) AS Receita_Total,
+       ROUND (SUM (Custo_Envio), 2) AS Custos_Totais,
+       ROUND (SUM (Valor_Venda) - SUM (Custo_Envio), 2) AS Margem_Lucro
+FROM TB_DSA_VENDAS, TB_DSA_CLIENTES
+WHERE TB_DSA_VENDAS.Cliente = TB_DSA_CLIENTES.ID_Cliente
+GROUP BY Regiao
+ORDER BY Margem_Lucro
+
+*Relatório de Rentabilidade por Categoria/Subcategoria de Produto*
+
+Objetivo: descobrir quais categorias de produtos têm maior ou menor rentabilidade.
+Destinatário: Gerente de Produtos.
+
+SELECT 
+    Categoria,
+    SubCategoria,
+    SUM (Quantidade_Vendida) AS Quantidade_Vendida,
+    ROUND (SUM (Valor_Venda), 2) AS Receita_Total,
+    SUM (Custo_Envio) AS Custos_Total,
+    ROUND (SUM (Valor_Venda) - SUM (Custo_Envio), 2) AS Margem_Lucro
+FROM TB_DSA_PRODUTOS, TB_DSA_VENDAS
+WHERE TB_DSA_PRODUTOS.ID_Produto = TB_DSA_VENDAS.Produto
+GROUP BY Categoria
+ORDER BY Margem_Lucro
+
+
+*Relatório de Impacto do Modo de Envio*
+
+Objetivo: avaliar se o modo de envio está aumentando custos sem gerar aumento proporcional de receita.
+Destinatário: Gerente de Logística
+
+SELECT 
+    p.Modo_Envio,
+    ROUND (AVG(sub.Receita_Total), 2) AS Receita_Media_Por_Pedido,
+    ROUND (AVG(sub.Custos_Totais), 2) AS Custos_Medios_Por_Pedido,
+    ROUND (AVG(sub.Margem_Lucro_Total), 2) AS Margem_Media_Por_Pedido
+FROM (
+    SELECT 
+        Pedido,
+        ROUND(SUM(Valor_Venda), 2) AS Receita_Total,
+        ROUND(SUM(Custo_Envio), 2) AS Custos_Totais,
+        ROUND(SUM(Valor_Venda) - SUM(Custo_Envio), 2) AS Margem_Lucro_Total
+    FROM TB_DSA_VENDAS
+    GROUP BY Pedido
+) sub
+JOIN TB_DSA_PEDIDOS p ON sub.Pedido = p.ID_Pedido
+GROUP BY p.Modo_Envio;
+
+
+*Relatório de Clientes com Maior e Menor Rentabilidade*
+
+Objetivo: identificar clientes estratégicos (maior margem) e clientes problemáticos (baixo lucro ou prejuízo).
+Destinatário: Equipe de Relacionamento com Clientes (CRM)
+
+- Maior Rentabilidade
+
+SELECT 
+    ID_Cliente,
+    Nome_Cliente,
+    ROUND (AVG(sub.Receita_Total), 2) AS Receita_Media_Por_Cliente,
+    ROUND (AVG(sub.Custos_Totais), 2) AS Custos_Medios_Por_Cliente,
+    ROUND (AVG(sub.Margem_Lucro_Total), 2) AS Margem_Media_Por_Cliente
+FROM (
+    SELECT 
+        Cliente,
+        ROUND(SUM(Valor_Venda), 2) AS Receita_Total,
+        ROUND(SUM(Custo_Envio), 2) AS Custos_Totais,
+        ROUND(SUM(Valor_Venda) - SUM(Custo_Envio), 2) AS Margem_Lucro_Total
+    FROM TB_DSA_VENDAS
+    GROUP BY Cliente
+) sub
+JOIN TB_DSA_CLIENTES p ON sub.Cliente = p.ID_Cliente
+GROUP BY ID_Cliente
+ORDER BY Margem_Media_Por_Cliente DESC
+LIMIT 10
+
+- Menor Rentabilidade
+
+SELECT 
+    ID_Cliente,
+    Nome_Cliente,
+    ROUND (AVG(sub.Receita_Total), 2) AS Receita_Media_Por_Cliente,
+    ROUND (AVG(sub.Custos_Totais), 2) AS Custos_Medios_Por_Cliente,
+    ROUND (AVG(sub.Margem_Lucro_Total), 2) AS Margem_Media_Por_Cliente
+FROM (
+    SELECT 
+        Cliente,
+        ROUND(SUM(Valor_Venda), 2) AS Receita_Total,
+        ROUND(SUM(Custo_Envio), 2) AS Custos_Totais,
+        ROUND(SUM(Valor_Venda) - SUM(Custo_Envio), 2) AS Margem_Lucro_Total
+    FROM TB_DSA_VENDAS
+    GROUP BY Cliente
+) sub
+JOIN TB_DSA_CLIENTES p ON sub.Cliente = p.ID_Cliente
+GROUP BY ID_Cliente
+ORDER BY Margem_Media_Por_Cliente
+LIMIT 10
